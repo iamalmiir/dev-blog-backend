@@ -63,6 +63,7 @@ router.post(
         payload,
         config.get('jwtSecret'),
         {
+          algorithm: 'HS512',
           expiresIn: 3600000,
         },
         (err, token) => {
