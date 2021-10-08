@@ -1,11 +1,17 @@
-const express = require('express')
-const router = express.Router()
+const { getProfile } = require('../../controllers/profile.controller')
 
-// @route   GET api/profile
-// @desc    Get all users
-// @access  Public
-router.get('/', (req, res) => {
-  res.send('profile')
-})
+const getProfileOpts = {
+  handler: getProfile,
+}
 
-module.exports = router
+const profileRoutes = (fastify, options, done) => {
+  // @route   POST api/auth
+  // @desc    Register a user
+  // @access  Public
+
+  fastify.get('/api/profile', getProfileOpts)
+
+  done()
+}
+
+module.exports = profileRoutes

@@ -1,11 +1,17 @@
-const express = require('express')
-const router = express.Router()
+const { getPosts } = require('../../controllers/posts.contoller')
 
-// @route   GET api/posts
-// @desc    Get all users
-// @access  Public
-router.get('/', (req, res) => {
-  res.send('posts')
-})
+const getPostsOpts = {
+  handler: getPosts,
+}
 
-module.exports = router
+const postsRoutes = (fastify, options, done) => {
+  // @route   POST api/users
+  // @desc    Register a user
+  // @access  Public
+
+  fastify.get('/api/posts', getPostsOpts)
+
+  done()
+}
+
+module.exports = postsRoutes

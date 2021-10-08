@@ -1,24 +1,21 @@
 {
-  "name": "project_two",
+  "name": "project_fastify",
   "version": "1.0.0",
-  "description": "Blog website",
   "main": "server.js",
-  "repository": "https://github.com/iamalmiir/dev-blog.git",
-  "author": "iamalmiir <iamalmiir@gmail.com>",
   "license": "MIT",
-  "private": false,
   "scripts": {
-    "start": "node server",
-    "server": "nodemon server"
+    "start": "node server.js",
+    "server": "nodemon server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "config": "^3.3.6",
-    "express": "^4.17.1",
     "express-validator": "^6.12.2",
+    "fastify": "^3.22.0",
+    "fastify-helmet": "^5.3.2",
+    "fastify-jwt": "^3.1.0",
+    "fastify-response-validation": "^0.2.0",
     "gravatar": "^1.8.2",
-    "helmet": "^4.6.0",
-    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.9",
     "request": "^2.88.2"
   },

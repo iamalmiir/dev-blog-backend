@@ -1,27 +1,43 @@
-const express = require('express')
+const fastify = require('fastify')({ logger: true })
+const crypto = require('crypto')
+const helmet = require('fastify-helmet')
 const connectDB = require('./config/db')
-const helmet = require('helmet')
 
-const app = express()
-app.use(helmet())
-
-// Connect Database
 connectDB()
 
-// Init Middleware
-app.use(express.json({ extended: false }))
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
+// fastify.register(require('fastify-response-validation'))
+fastify.register(helmet, {
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: [
+        function (req, res) {
+          res.scriptNonce = crypto.randomBytes(16).toString('hex')
+        },
+      ],
+      styleSrc: [
+        function (req, res) {
+          res.styleNonce = crypto.randomBytes(16).toString('hex')
+        },
+      ],
+    },
+  },
 })
 
-// Define Routes
-app.use('/api/users', require('./routes/api/users'))
-app.use('/api/auth', require('./routes/api/auth'))
-app.use('/api/profile', require('./routes/api/profile'))
-app.use('/api/posts', require('./routes/api/posts'))
+fastify.register(require('./routes/api/auth'))
+fastify.register(require('./routes/api/users'))
+fastify.register(require('./routes/api/profile'))
+fastify.register(require('./routes/api/posts'))
 
-const PORT = process.env.PORT || 5000
-app.listen(PORT, () => {
-  console.log(`Server is running on port: ${PORT} 🚀`)
-})
+const start = async () => {
+  const PORT = process.env.PORT || 5000
+  try {
+    await fastify.listen(PORT)
+    fastify.log.info(`Server listening on port: ${PORT} 🚀`)
+  } catch (err) {
+    fastify.log.error(err)
+    process.exit(1)
+  }
+}
+
+start()
