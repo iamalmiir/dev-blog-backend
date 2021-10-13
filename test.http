@@ -1,2 +1,0 @@
-### Test route
-GET http://localhost:5000/api/auth HTTP/1.1

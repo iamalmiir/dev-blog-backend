@@ -1,7 +1,5 @@
 const { getAuth } = require('../../controllers/auth.controller')
 const auth = require('../../middleware/auth')
-const jwt = require('jsonwebtoken')
-const config = require('config')
 
 const getAuthOpts = {
   handler: getAuth,
