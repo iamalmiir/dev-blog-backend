@@ -27,6 +27,7 @@ fastify.register(helmet, {
 fastify.register(require('./routes/api/auth'))
 fastify.register(require('./routes/api/users'))
 fastify.register(require('./routes/api/profile'))
+fastify.register(require('./routes/api/profilepub'))
 fastify.register(require('./routes/api/posts'))
 
 const start = async () => {

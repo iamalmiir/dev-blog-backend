@@ -1,4 +1,5 @@
 const { getProfile } = require('../../controllers/profile.controller')
+const { createUpdateProfileOpts } = require('../../lib/profile.options')
 const auth = require('../../middleware/auth')
 
 const getProfileOpts = {
@@ -6,12 +7,16 @@ const getProfileOpts = {
 }
 
 const profileRoutes = (fastify, options, done) => {
-  // @route   POST api/auth
-  // @desc    Register a user
-  // @access  Public
+  // @route   GET api/profile/me
+  // @desc    Get user profile
+  // @access  Private
   fastify.addHook('preHandler', auth)
   fastify.get('/api/profile/me', getProfileOpts)
 
+  // @route   POST api/profile
+  // @desc    Create or update user profile
+  // @access  Private
+  fastify.post('/api/profile', createUpdateProfileOpts)
   done()
 }
 
