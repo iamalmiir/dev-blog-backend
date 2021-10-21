@@ -1,3 +1,4 @@
+const auth = require('../../middleware/auth')
 const { getPosts } = require('../../controllers/posts.contoller')
 
 const getPostsOpts = {

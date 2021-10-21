@@ -1,6 +1,7 @@
 const {
   getAllProfiles,
   getSingleProfile,
+  getGithubRepos,
 } = require('../../controllers/profile.controller')
 const checkObjectId = require('../../middleware/checkObjectId')
 
@@ -18,8 +19,9 @@ const profilePublicRoutes = (fastify, options, done) => {
   // @access   Public
   fastify.get('/api/profile', getAllProfilesOpts)
 
-  fastify.get('/user/:user_id', getSingleProfileOpts)
-  //   fastify.addHook('preValidation', checkObjectId('user_id'))
+  fastify.get('/api/profile/user/:user_id', getSingleProfileOpts)
+  fastify.get('/api/profile/github/:username', getGithubRepos)
+
   done()
 }
 
