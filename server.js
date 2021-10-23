@@ -11,13 +11,13 @@ fastify.register(helmet, {
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: [
-        function (req, res) {
-          res.scriptNonce = crypto.randomBytes(16).toString('hex')
+        function (req, reply) {
+          reply.scriptNonce = crypto.randomBytes(16).toString('hex')
         },
       ],
       styleSrc: [
-        function (req, res) {
-          res.styleNonce = crypto.randomBytes(16).toString('hex')
+        function (req, reply) {
+          reply.styleNonce = crypto.randomBytes(16).toString('hex')
         },
       ],
     },
