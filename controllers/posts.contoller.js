@@ -1,3 +1,7 @@
+const {
+  createPostSchema,
+  checkObjectId,
+} = require('../validation/post.schemas')
 const User = require('../models/User')
 const Post = require('../models/Post')
 
@@ -5,6 +9,11 @@ const Post = require('../models/Post')
 // @desc    Create post
 // @access  Private
 const createPosts = async (req, reply) => {
+  const { error } = createPostSchema.validate(req.body)
+  if (error) {
+    return reply.status(400).send(error.details[0].message)
+  }
+
   try {
     const user = await User.findById(req.user.id).select('-password')
 
@@ -41,6 +50,12 @@ const getPosts = async (req, reply) => {
 // @desc     Get post by ID
 // @access   Private
 const getPostById = async (req, reply) => {
+  const { error } = checkObjectId.validate(req.params.id)
+
+  if (error) {
+    return reply.status(400).send('Post not found')
+  }
+
   try {
     const post = await Post.findById(req.params.id)
 
@@ -59,6 +74,12 @@ const getPostById = async (req, reply) => {
 // @desc     Delete a post
 // @access   Private
 const deletePost = async (req, reply) => {
+  const { error } = checkObjectId.validate(req.params.id)
+
+  if (error) {
+    return reply.status(400).send('Post not found')
+  }
+
   try {
     const post = await Post.findById(req.params.id)
 
@@ -85,6 +106,12 @@ const deletePost = async (req, reply) => {
 // @desc     Like a post
 // @access   Private
 const likePost = async (req, reply) => {
+  const { error } = checkObjectId.validate(req.params.id)
+
+  if (error) {
+    return reply.status(400).send('Post not found')
+  }
+
   try {
     const post = await Post.findById(req.params.id)
 
@@ -108,12 +135,18 @@ const likePost = async (req, reply) => {
 // @desc     Unlike a post
 // @access   Private
 const unlikePost = async (req, reply) => {
+  const { error } = checkObjectId.validate(req.params.id)
+
+  if (error) {
+    return reply.status(400).send('Post not found')
+  }
+
   try {
     const post = await Post.findById(req.params.id)
 
     // Check if the post has not yet been liked
     if (!post.likes.some((like) => like.user.toString() === req.user.id)) {
-      return res.status(400).json({ msg: 'Post has not yet been liked' })
+      return reply.code(400).send({ msg: 'Post has not yet been liked' })
     }
 
     // remove the like
@@ -123,10 +156,10 @@ const unlikePost = async (req, reply) => {
 
     await post.save()
 
-    return res.json(post.likes)
+    return reply.send(post.likes)
   } catch (err) {
     console.error(err.message)
-    res.status(500).send('Server Error')
+    reply.code(500).send('Server Error')
   }
 }
 
@@ -134,6 +167,12 @@ const unlikePost = async (req, reply) => {
 // @desc     Comment on a post
 // @access   Private
 const commentOnPost = async (req, reply) => {
+  const { error } = checkObjectId.validate(req.params.id)
+
+  if (error) {
+    return reply.status(400).send('Post not found')
+  }
+
   try {
     const user = await User.findById(req.user.id).select('-password')
     const post = await Post.findById(req.params.id)
@@ -160,6 +199,11 @@ const commentOnPost = async (req, reply) => {
 // @desc     Delete comment
 // @access   Private
 const deleteComment = async (req, reply) => {
+  const { error } = checkObjectId.validate(req.params)
+
+  if (error) {
+    return reply.status(400).send('Post not found')
+  }
   try {
     const post = await Post.findById(req.params.id)
 
@@ -169,11 +213,11 @@ const deleteComment = async (req, reply) => {
     )
     // Make sure comment exists
     if (!comment) {
-      return res.status(404).json({ msg: 'Comment does not exist' })
+      return reply.code(404).send({ msg: 'Comment does not exist' })
     }
     // Check user
     if (comment.user.toString() !== req.user.id) {
-      return res.status(401).json({ msg: 'User not authorized' })
+      return reply.code(401).send({ msg: 'User not authorized' })
     }
 
     post.comments = post.comments.filter(
@@ -182,10 +226,10 @@ const deleteComment = async (req, reply) => {
 
     await post.save()
 
-    return res.json(post.comments)
+    return reply.send(post.comments)
   } catch (err) {
     console.error(err.message)
-    return res.status(500).send('Server Error')
+    return reply.code(500).send('Server Error')
   }
 }
 
@@ -193,22 +237,27 @@ const deleteComment = async (req, reply) => {
 // @desc     Like a post
 // @access   Private
 const likeComment = async (req, reply) => {
+  const { error } = checkObjectId.validate(req.params.id)
+
+  if (error) {
+    return reply.status(400).send('Post not found')
+  }
   try {
     const post = await Post.findById(req.params.id)
 
     // Check if the post has already been liked
     if (post.likes.some((like) => like.user.toString() === req.user.id)) {
-      return res.status(400).json({ msg: 'Post already liked' })
+      return reply.code(400).send({ msg: 'Post already liked' })
     }
 
     post.likes.unshift({ user: req.user.id })
 
     await post.save()
 
-    return res.json(post.likes)
+    return reply.send(post.likes)
   } catch (err) {
     console.error(err.message)
-    res.status(500).send('Server Error')
+    reply.code(500).send('Server Error')
   }
 }
 

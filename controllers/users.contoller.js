@@ -1,10 +1,16 @@
 const config = require('config')
+const { authSchema, registerSchema } = require('../validation/auth.schemas')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const gravatar = require('gravatar')
 const User = require('../models/User')
 
 const registerUser = async (req, reply) => {
+  const { error } = registerSchema.validate(req.body)
+  if (error) {
+    return reply.status(400).send(error.details[0].message)
+  }
+
   const { name, email, password } = req.body
 
   try {
@@ -55,6 +61,11 @@ const registerUser = async (req, reply) => {
 }
 
 const authUser = async (req, reply) => {
+  const { error } = authSchema.validate(req.body)
+  if (error) {
+    return reply.code(400).send({ errors: [{ msg: error.details[0].message }] })
+  }
+
   const { email, password } = req.body
 
   try {

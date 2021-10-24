@@ -1,5 +1,9 @@
 const normalize = require('normalize-url')
-const config = require('config')
+// const config = require('config')
+const {
+  profileSchema,
+  checkObjectId,
+} = require('../validation/profile.schemas')
 const axios = require('axios')
 const User = require('../models/User')
 const Profile = require('../models/Profile')
@@ -27,6 +31,11 @@ const getProfile = async (req, reply) => {
 // @desc     Create or update user profile
 // @access   Private
 const createUpdateProfile = async (req, reply) => {
+  const { error } = profileSchema.validate(req.body)
+  if (error) {
+    return reply.code(400).send(error.details[0].message)
+  }
+
   try {
     const {
       website,
@@ -98,6 +107,8 @@ const getAllProfiles = async (req, reply) => {
 // @access   Public
 
 const getSingleProfile = async ({ params: { user_id } }, reply) => {
+  const { error } = checkObjectId.validate({ user_id })
+
   try {
     const profile = await Profile.findOne({
       user: user_id,
