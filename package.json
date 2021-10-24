@@ -5,7 +5,9 @@
   "license": "MIT",
   "scripts": {
     "start": "node server.js",
-    "server": "nodemon server.js"
+    "server": "nodemon server.js",
+    "client": "yarn dev --prefix client",
+    "deve": "concurrently \"yarn server\" \"yarn client\""
   },
   "dependencies": {
     "axios": "^0.23.0",
