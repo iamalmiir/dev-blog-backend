@@ -3,6 +3,10 @@ const {
   getPosts,
   getPostById,
   deletePost,
+  likePost,
+  unlikePost,
+  commentOnPost,
+  deleteComment,
 } = require('../../controllers/posts.contoller')
 const createPostsOpts = require('../../lib/posts.options')
 
@@ -11,11 +15,33 @@ const getPostsOpts = {
 }
 
 const getPostByIdOpts = {
+  method: 'GET',
   handler: getPostById,
 }
 
 const deletePosOpts = {
+  method: 'DELETE',
   handler: deletePost,
+}
+
+const likePostOpts = {
+  method: 'PUT',
+  handler: likePost,
+}
+
+const unlikePostOpts = {
+  method: 'PUT',
+  handler: unlikePost,
+}
+
+const commentOnPostOpts = {
+  method: 'POST',
+  handler: commentOnPost,
+}
+
+const deleteCommentonPostOpts = {
+  method: 'DELETE',
+  handler: deleteComment,
 }
 
 const postsRoutes = (fastify, options, done) => {
@@ -40,6 +66,25 @@ const postsRoutes = (fastify, options, done) => {
   // @access   Private
   fastify.delete('/api/posts/:id', deletePosOpts)
 
+  // @route    PUT api/posts/like/:id
+  // @desc     Like a post
+  // @access   Private
+  fastify.put('/api/posts/like/:id', likePostOpts)
+
+  // @route    PUT api/posts/unlike/:id
+  // @desc     Unlike a post
+  // @access   Private
+  fastify.put('/api/posts/unlike/:id', unlikePostOpts)
+
+  // @route    POST api/posts/comment/:id
+  // @desc     Comment on a post
+  // @access   Private
+  fastify.post('/api/posts/comment/:id', commentOnPostOpts)
+
+  // @route    DELETE api/posts/comment/:id/:comment_id
+  // @desc     Delete comment
+  // @access   Private
+  fastify.delete('/api/posts/comment/:id/:comment_id', deleteCommentonPostOpts)
   done()
 }
 

@@ -2,6 +2,8 @@ const normalize = require('normalize-url')
 // const config = require('config')
 const {
   profileSchema,
+  validateExperience,
+  validateEducation,
   checkObjectId,
 } = require('../validation/profile.schemas')
 const axios = require('axios')
@@ -151,6 +153,11 @@ const deleteProfile = async (req, reply) => {
 // @desc     Add profile experience
 // @access   Private
 const addExperience = async (req, reply) => {
+  const { error } = validateExperience.validate(req.body)
+  if (error) {
+    return reply.code(400).send(error.details[0].message)
+  }
+
   try {
     const profile = await Profile.findOne({ user: req.user.id })
 
@@ -169,6 +176,11 @@ const addExperience = async (req, reply) => {
 // @desc     Delete experience from profile
 // @access   Private
 const deleteExperience = async (req, reply) => {
+  const { error } = checkObjectId.validate({ exp_id: req.params.exp_id })
+  if (error) {
+    return reply.code(400).send(error.details[0].message)
+  }
+
   try {
     const foundProfile = await Profile.findOne({ user: req.user.id })
 
@@ -188,6 +200,11 @@ const deleteExperience = async (req, reply) => {
 // @desc     Add profile education
 // @access   Private
 const addEducation = async (req, reply) => {
+  const { error } = validateEducation.validate(req.body)
+  if (error) {
+    return reply.code(400).send(error.details[0].message)
+  }
+
   try {
     const profile = await Profile.findOne({ user: req.user.id })
 

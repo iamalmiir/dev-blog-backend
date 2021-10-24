@@ -53,7 +53,7 @@ const getPostById = async (req, reply) => {
   const { error } = checkObjectId.validate(req.params.id)
 
   if (error) {
-    return reply.status(400).send('Post not found')
+    return reply.status(400).send('Not found')
   }
 
   try {
@@ -77,7 +77,7 @@ const deletePost = async (req, reply) => {
   const { error } = checkObjectId.validate(req.params.id)
 
   if (error) {
-    return reply.status(400).send('Post not found')
+    return reply.status(400).send('Not found')
   }
 
   try {
@@ -109,7 +109,7 @@ const likePost = async (req, reply) => {
   const { error } = checkObjectId.validate(req.params.id)
 
   if (error) {
-    return reply.status(400).send('Post not found')
+    return reply.status(400).send('Not found')
   }
 
   try {
@@ -138,7 +138,7 @@ const unlikePost = async (req, reply) => {
   const { error } = checkObjectId.validate(req.params.id)
 
   if (error) {
-    return reply.status(400).send('Post not found')
+    return reply.status(400).send('Not found')
   }
 
   try {
@@ -170,7 +170,7 @@ const commentOnPost = async (req, reply) => {
   const { error } = checkObjectId.validate(req.params.id)
 
   if (error) {
-    return reply.status(400).send('Post not found')
+    return reply.status(400).send('Not found')
   }
 
   try {
@@ -199,10 +199,10 @@ const commentOnPost = async (req, reply) => {
 // @desc     Delete comment
 // @access   Private
 const deleteComment = async (req, reply) => {
-  const { error } = checkObjectId.validate(req.params)
+  const { error } = checkObjectId.validate(req.params.comment_id)
 
   if (error) {
-    return reply.status(400).send('Post not found')
+    return reply.status(400).send('Not found')
   }
   try {
     const post = await Post.findById(req.params.id)

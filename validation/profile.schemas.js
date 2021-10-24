@@ -38,9 +38,31 @@ const profileSchema = Joi.object().keys({
   instagram: Joi.string().min(5),
 })
 
+const validateExperience = Joi.object().keys({
+  title: Joi.string().min(5).required(),
+  company: Joi.string().min(5).required(),
+  location: Joi.string().min(5),
+  from: Joi.date().required(),
+  to: Joi.date(),
+  current: Joi.boolean(),
+  description: Joi.string().min(5),
+})
+
+const validateEducation = Joi.object().keys({
+  school: Joi.string().min(5).required(),
+  degree: Joi.string().min(5).required(),
+  fieldofstudy: Joi.string().min(5).required(),
+  from: Joi.date().required(),
+  to: Joi.date(),
+  current: Joi.boolean(),
+  description: Joi.string().min(5),
+})
+
 const checkObjectId = Joi.string().length(24).required()
 
 module.exports = {
   profileSchema,
+  validateExperience,
+  validateEducation,
   checkObjectId,
 }
