@@ -1,12 +1,13 @@
-import { useState } from 'react'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import Navbar from './components/Navbar'
+import Landing from './components/Landing'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <main>
-      <h1>Client</h1>
-    </main>
+    <Router>
+      <Navbar />
+      <Route exact path='/' component={Landing} />
+    </Router>
   )
 }
 
