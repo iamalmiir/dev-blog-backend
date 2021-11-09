@@ -31,7 +31,7 @@ fastify.register(require('./routes/api/profilepub'))
 fastify.register(require('./routes/api/posts'))
 
 const start = async () => {
-  const PORT = process.env.PORT || 5000
+  const PORT = 3000
   try {
     await fastify.listen(PORT)
     fastify.log.info(`Server listening on port: ${PORT} 🚀`)
